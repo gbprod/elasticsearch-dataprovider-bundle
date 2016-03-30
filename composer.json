@@ -1,0 +1,30 @@
+{
+    "name": "gbprod/elasticsearch-dataprovider-bundle",
+    "description": "Bundle that can easily provide data in elasticsearch indices with Symfony",
+    "type": "symfony-bundle",
+    "require": {
+        "m6web/elasticsearch-bundle": "^1.0",
+        "symfony/framework-bundle": "^2.3|^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "GBProd",
+            "email": "contact@gb-prod.fr"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "GBProd\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\GBProd\\": "tests/"
+        }
+    }
+}
