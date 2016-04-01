@@ -101,7 +101,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         $definition = new Definition(DataProvider::class);
         $definition->addTag(
             'elasticsearch_dataprovider.provider', 
-            ['type' => $type]
+            ['type' => 'my-type']
         );
         
         $this->container->setDefinition(

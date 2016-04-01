@@ -38,19 +38,17 @@ class DataProviderCompilerPass extends \PHPUnit_Framework_TestCase
     
     private function processProvider(ContainerBuilder $container, $registry, $providerId, $tags)
     {
-        $this->validateIsAProvider(
-            $container->getDefinition($providerId)
-        );
+        $this->validateIsAProvider($container, $providerId);
 
         foreach ($tags as $tag) {
-            $this->validateTag($tag);
+            $this->validateTag($tag, $providerId);
             $this->registerProvider($registry, $providerId, $tag);
         }
     }
     
-    private function validateIsAProvider(Definition $definition)
+    private function validateIsAProvider(ContainerBuilder $container, $providerId)
     {
-        if ($this->isNotAProvider($definition)) {
+        if ($this->isNotAProvider($container->getDefinition($providerId))) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'DataProvider "%s" must extends DataProvider.', 
@@ -69,7 +67,7 @@ class DataProviderCompilerPass extends \PHPUnit_Framework_TestCase
         ;
     }
     
-    private function validateTag($tag)
+    private function validateTag($tag, $providerId)
     {
         if ($this->isTagIncorrect($tag)) {
             throw new \InvalidArgumentException(
