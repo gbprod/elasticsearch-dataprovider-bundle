@@ -1,6 +1,6 @@
 <?php
 
-namespace GBProd\ElasticsearchDataproviderBundle;
+namespace GBProd\ElasticsearchDataProviderBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * 
  * @author gbprod <contact@gb-prod.fr>
  */
-class ElasticsearchDataproviderBundle extends Bundle
+class ElasticsearchDataProviderBundle extends Bundle
 {
     
 }

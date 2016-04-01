@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\GBProd\ElasticsearchDataproviderBundle\DataProvider;
+namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use Elasticsearch\Client;
-use GBProd\ElasticsearchDataproviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 
 /**
  * Tests for abstract data provider

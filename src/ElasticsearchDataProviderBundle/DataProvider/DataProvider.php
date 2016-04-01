@@ -1,6 +1,6 @@
 <?php
 
-namespace GBProd\ElasticsearchDataproviderBundle\DataProvider;
+namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use Elasticsearch\Client;
 
@@ -47,7 +47,7 @@ abstract class DataProvider
      *
      * @return null
      */
-    public abstract function populate();
+    abstract public function populate();
 
     /**
      * Index document

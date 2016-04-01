@@ -29,7 +29,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new GBProd\ElasticsearchDataproviderBundle\ElasticsearchDataproviderBundle(),
+        new GBProd\ElasticsearchDataProviderBundle\ElasticsearchDataProviderBundle(),
         // ...
     );
 }
@@ -44,7 +44,7 @@ public function registerBundles()
 
 namespace GBProd\AcmeBundle\DataProvider;
 
-use GBProd\ElasticsearchDataproviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 
 class SuperHeroDataProvider extends DataProvider
 {
@@ -106,7 +106,7 @@ php app/console elasticsearch:provide
 
 namespace GBProd\AcmeBundle\DataProvider;
 
-use GBProd\ElasticsearchDataproviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 use Doctrine\ORM\EntityManager;
 
 class SuperHeroDataProvider extends DataProvider
