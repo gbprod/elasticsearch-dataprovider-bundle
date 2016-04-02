@@ -30,7 +30,6 @@ class ProvideCommand extends ContainerAwareCommand
             )
             ->addArgument(
                 'type',
-                null,
                 InputArgument::OPTIONAL,
                 'Type to provide'
             )
