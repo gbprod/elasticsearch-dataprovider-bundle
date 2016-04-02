@@ -4,3 +4,5 @@ services:
         
     gbprod.elasticsearch_dataprovider.handler:
         class: GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler
+        arguments:
+            - '@gbprod.elasticsearch_dataprovider.registry'

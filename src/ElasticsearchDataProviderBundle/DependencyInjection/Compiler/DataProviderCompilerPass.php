@@ -2,7 +2,7 @@
 
 namespace GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler;
 
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -51,7 +51,7 @@ class DataProviderCompilerPass extends \PHPUnit_Framework_TestCase
         if ($this->isNotAProvider($container->getDefinition($providerId))) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'DataProvider "%s" must extends DataProvider.', 
+                    'DataProvider "%s" must implements DataProviderInterface.', 
                     $providerId
                 )
             );
@@ -62,9 +62,7 @@ class DataProviderCompilerPass extends \PHPUnit_Framework_TestCase
     {
         $reflection = new \ReflectionClass($definition->getClass());
 
-        return false === $reflection->isSubclassOf(DataProvider::class)
-            && DataProvider::class !== $definition->getClass()
-        ;
+        return !$reflection->implementsInterface(DataProviderInterface::class);
     }
     
     private function validateTag($tag, $providerId)

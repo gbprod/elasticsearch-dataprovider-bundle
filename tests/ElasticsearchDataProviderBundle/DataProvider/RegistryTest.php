@@ -3,7 +3,7 @@
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
 
 /**
  * Tests for DataProvider registry
@@ -29,9 +29,9 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     
     public function testGetProvidersReturnAllProviders()
     {
-        $provider1 = $this->getMock(DataProvider::class);
-        $provider2 = $this->getMock(DataProvider::class);
-        $provider3 = $this->getMock(DataProvider::class);
+        $provider1 = $this->getMock(DataProviderInterface::class);
+        $provider2 = $this->getMock(DataProviderInterface::class);
+        $provider3 = $this->getMock(DataProviderInterface::class);
         
         $this->testedInstance
             ->addProvider($provider1, 'index', 'type1')
@@ -50,10 +50,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     
     public function testGetProvidersReturnProvidersForAnIndex()
     {
-        $provider1 = $this->getMock(DataProvider::class);
-        $provider2 = $this->getMock(DataProvider::class);
-        $provider3 = $this->getMock(DataProvider::class);
-        $provider4 = $this->getMock(DataProvider::class);
+        $provider1 = $this->getMock(DataProviderInterface::class);
+        $provider2 = $this->getMock(DataProviderInterface::class);
+        $provider3 = $this->getMock(DataProviderInterface::class);
+        $provider4 = $this->getMock(DataProviderInterface::class);
         
         $this->testedInstance
             ->addProvider($provider1, 'index2', 'type')
@@ -74,10 +74,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     
     public function testGetProvidersReturnProvidersForAnIndexAndAType()
     {
-        $provider1 = $this->getMock(DataProvider::class);
-        $provider2 = $this->getMock(DataProvider::class);
-        $provider3 = $this->getMock(DataProvider::class);
-        $provider4 = $this->getMock(DataProvider::class);
+        $provider1 = $this->getMock(DataProviderInterface::class);
+        $provider2 = $this->getMock(DataProviderInterface::class);
+        $provider3 = $this->getMock(DataProviderInterface::class);
+        $provider4 = $this->getMock(DataProviderInterface::class);
         
         $this->testedInstance
             ->addProvider($provider1, 'index', 'type2')

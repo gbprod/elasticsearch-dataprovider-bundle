@@ -9,7 +9,7 @@ use Elasticsearch\Client;
  *
  * @author gbprod <contact@gb-prod.fr>
  */
-abstract class DataProvider
+abstract class DataProvider implements DataProviderInterface
 {
     /**
      * @var Client
@@ -27,11 +27,7 @@ abstract class DataProvider
     private $type;
 
     /**
-     * Populate index
-     *
-     * @param Client $client
-     * @index string $index
-     * @index string $type
+     * {@inheritdoc}
      */
     public function run(Client $client, $index, $type)
     {

@@ -3,7 +3,7 @@
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler;
 
 use GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler\DataProviderCompilerPass;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -59,7 +59,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
     
     private function newDataProviderDefinition($index, $type)
     {
-        $definition = new Definition(DataProvider::class);
+        $definition = new Definition(DataProviderInterface::class);
         $definition->addTag(
             'elasticsearch_dataprovider.provider', 
             ['index' => $index, 'type' => $type]
@@ -98,7 +98,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
             $this->registryDefinition
         );
         
-        $definition = new Definition(DataProvider::class);
+        $definition = new Definition(DataProviderInterface::class);
         $definition->addTag(
             'elasticsearch_dataprovider.provider', 
             ['type' => 'my-type']

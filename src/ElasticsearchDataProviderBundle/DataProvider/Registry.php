@@ -3,25 +3,25 @@
 namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 /**
- * Registry for DataProviders
+ * Registry for DataProvider
  * 
  * @author gbprod <contact@gb-prod.fr>
  */
 class Registry
 {
     /**
-     * @var array<DataProvider>
+     * @var array<DataProviderInterface>
      */
     private $providers = [];
     
     /**
      * Add a provider to the registry
      * 
-     * @param DataProvider $provider
-     * @param string       $index
-     * @param string       $type
+     * @param DataProviderInterface $provider
+     * @param string                $index
+     * @param string                $type
      */
-    public function addProvider(DataProvider $provider, $index, $type)
+    public function addProvider(DataProviderInterface $provider, $index, $type)
     {
         $this->providers[] = [
             'provider' => $provider,
@@ -38,7 +38,7 @@ class Registry
      * @param string $index
      * @param string $type
      * 
-     * @return array<DataProvider>
+     * @return array<DataProviderInterface>
      */
     public function getProviders($index = null, $type = null)
     {
