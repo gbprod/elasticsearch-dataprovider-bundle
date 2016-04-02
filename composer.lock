@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1370b6adb05a911e07c55ec849c00cc3",
-    "content-hash": "f37bf1b6452f5de87bc2a77d36ca797a",
+    "hash": "7a919e0febbf4279b4a3d5b83ff755ad",
+    "content-hash": "76a8d368aa982b0da73d117a1a02c8b6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -356,30 +356,30 @@
         },
         {
             "name": "m6web/elasticsearch-bundle",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/M6Web/ElasticsearchBundle.git",
-                "reference": "e1c12afbb173a3eb8200f4f9d51561a785fdb57b"
+                "reference": "a91de19424073d92c9ef490ad87f6c463d8cc0cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/M6Web/ElasticsearchBundle/zipball/e1c12afbb173a3eb8200f4f9d51561a785fdb57b",
-                "reference": "e1c12afbb173a3eb8200f4f9d51561a785fdb57b",
+                "url": "https://api.github.com/repos/M6Web/ElasticsearchBundle/zipball/a91de19424073d92c9ef490ad87f6c463d8cc0cd",
+                "reference": "a91de19424073d92c9ef490ad87f6c463d8cc0cd",
                 "shasum": ""
             },
             "require": {
                 "elasticsearch/elasticsearch": "~2.0",
-                "php": ">=5.4"
+                "php": ">=5.5"
             },
             "require-dev": {
-                "atoum/atoum": "master-dev",
+                "atoum/atoum": "^2.6",
                 "m6web/coke": "~1.2.0",
                 "m6web/symfony2-coding-standard": "~1.2.0",
-                "symfony/config": "~2.3.0",
-                "symfony/dependency-injection": "~2.3.0",
-                "symfony/event-dispatcher": "~2.3.0",
-                "symfony/yaml": "~2.3"
+                "symfony/config": "^2.3|^3.0",
+                "symfony/dependency-injection": "^2.3|^3.0",
+                "symfony/event-dispatcher": "^2.3|^3.0",
+                "symfony/yaml": "^2.3|^3.0"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -398,7 +398,7 @@
                 }
             ],
             "description": "Symfony2 Bundle on top of elasticsearch/elasticsearch-php",
-            "time": "2016-03-16 10:07:38"
+            "time": "2016-04-01 10:02:59"
         },
         {
             "name": "paragonie/random_compat",
@@ -488,16 +488,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "8ffacee1171e33a1c129f424bf1ec36e062eba82"
+                "reference": "f942da7b505d1a294284ab343d05df42d02ad6d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/8ffacee1171e33a1c129f424bf1ec36e062eba82",
-                "reference": "8ffacee1171e33a1c129f424bf1ec36e062eba82",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/f942da7b505d1a294284ab343d05df42d02ad6d9",
+                "reference": "f942da7b505d1a294284ab343d05df42d02ad6d9",
                 "shasum": ""
             },
             "require": {
@@ -528,7 +528,7 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2016-03-24 21:20:22"
+            "time": "2016-03-31 13:10:33"
         },
         {
             "name": "symfony/asset",
@@ -693,6 +693,66 @@
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
             "time": "2016-03-04 07:55:57"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "6b1175135bc2a74c08a28d89761272de8beed8cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/6b1175135bc2a74c08a28d89761272de8beed8cd",
+                "reference": "6b1175135bc2a74c08a28d89761272de8beed8cd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "~2.8|~3.0",
+                "symfony/process": "~2.8|~3.0"
+            },
+            "suggest": {
+                "psr/log": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Console\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-03-16 17:00:50"
         },
         {
             "name": "symfony/debug",
