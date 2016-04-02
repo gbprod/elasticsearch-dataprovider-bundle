@@ -28,14 +28,17 @@ Declare in your `app/AppKernel.php` file:
 public function registerBundles()
 {
     $bundles = array(
-        // ...
+        new M6Web\Bundle\ElasticsearchBundle\M6WebElasticsearchBundle(),
         new GBProd\ElasticsearchDataProviderBundle\ElasticsearchDataProviderBundle(),
-        // ...
     );
 }
 ```
 
 ## Usage
+
+### Configure Elasticsearch clients
+
+See [M6WebElasticsearchBundle](https://github.com/M6Web/ElasticsearchBundle) for configuring clients.
 
 ### Create a Data Provider
 
@@ -97,6 +100,12 @@ Or run all providers:
 
 ```bash
 php app/console elasticsearch:provide
+```
+
+You can set a specific client to use (if not default):
+
+```bash
+php app/console elasticsearch:provide app superheros --client=my_client
 ```
 
 ## Example using doctrine

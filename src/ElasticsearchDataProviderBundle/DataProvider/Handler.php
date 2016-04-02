@@ -2,6 +2,8 @@
 
 namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
+use Elasticsearch\Client;
+
 /**
  * Handle data providing
  * 
@@ -9,7 +11,7 @@ namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
  */
 class Handler
 {
-    public function handle($index, $type)
+    public function handle(Client $client, $index, $type)
     {
         
     }

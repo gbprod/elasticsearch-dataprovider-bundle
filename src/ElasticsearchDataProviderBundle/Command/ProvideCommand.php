@@ -4,6 +4,7 @@ namespace GBProd\ElasticsearchDataProviderBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,6 +34,13 @@ class ProvideCommand extends ContainerAwareCommand
                 InputArgument::OPTIONAL,
                 'Type to provide'
             )
+            ->addOption(
+                'client',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Client to use (if not default)',
+                'default'
+            )
         ;
     }
     
@@ -45,9 +53,37 @@ class ProvideCommand extends ContainerAwareCommand
             ->get('gbprod.elasticsearch_dataprovider.handler')
         ;
         
-        $handler->handle(
-            $input->getArgument('index'),
-            $input->getArgument('type')
-        );
+        $client = $this->getClient($input->getOption('client'));
+        
+        $index = $input->getArgument('index');
+        $type  = $input->getArgument('type');
+
+        $output->writeln(sprintf(
+            '<info>Providing <comment>%s/%s</comment> for client <comment>%s</comment>...</info>',
+            $index ?: '*',
+            $type ?: '*',
+            $input->getOption('client')
+        ));
+        
+        $handler->handle($client, $index, $type);
+    }
+    
+    private function getClient($clientName)
+    {
+        $client = $this->getContainer()
+            ->get(sprintf(
+                'm6web_elasticsearch.client.%s',
+                $clientName
+            ))
+        ;
+        
+        if (!$client) {
+            throw new \InvalidArgumentException(sprintf(
+                'No client "%s" found',
+                $clientName
+            ));
+        }
+        
+        return $client;
     }
 }

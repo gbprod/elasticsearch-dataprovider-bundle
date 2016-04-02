@@ -5,8 +5,9 @@ namespace Tests\GBProd\ElasticsearchDataProviderBundle\Command;
 use GBProd\ElasticsearchDataProviderBundle\Command\ProvideCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Container;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler;
+use Elasticsearch\Client;
 
 /**
  * Tests for ProvideCommand
@@ -17,6 +18,7 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
 {
     private $commandTester;
     private $handler;
+    private $client;
     
     public function setUp()
     {
@@ -32,14 +34,23 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock()
         ;
         
-        $container = $this->getMock(ContainerInterface::class);
+        $container = new Container();
         
-        $container
-            ->expects($this->once())
-            ->method('get')
-            ->with('gbprod.elasticsearch_dataprovider.handler')
-            ->willReturn($this->handler)
+        $container->set(
+            'gbprod.elasticsearch_dataprovider.handler',
+            $this->handler
+        );
+        
+        $this->client = $this
+            ->getMockBuilder(Client::class)
+            ->disableOriginalConstructor()
+            ->getMock()
         ;
+        
+        $container->set(
+            'm6web_elasticsearch.client.default',
+            $this->client
+        );
         
         $command->setContainer($container);
     }    
@@ -48,7 +59,7 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
         $this->handler
             ->expects($this->once())
             ->method('handle')
-            ->with('my_index', 'my_type')
+            ->with($this->client, 'my_index', 'my_type')
         ;
         
         $this->commandTester->execute([
