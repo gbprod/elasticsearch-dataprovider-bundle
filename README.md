@@ -158,5 +158,5 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
-            - { name: elasticsearch.data_provider, index: app, type: superheros }
+            - { name: elasticsearch.dataprovider, index: app, type: superheros }
 ```

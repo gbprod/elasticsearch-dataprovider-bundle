@@ -29,7 +29,7 @@ class DataProviderCompilerPass implements CompilerPassInterface
         );
         
         $providers = $container->findTaggedServiceIds(
-            'elasticsearch_dataprovider.provider'
+            'elasticsearch.dataprovider'
         );
         
         foreach ($providers as $providerId => $tags) {

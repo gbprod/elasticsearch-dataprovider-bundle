@@ -43,7 +43,7 @@ abstract class DataProvider implements DataProviderInterface
      *
      * @return null
      */
-    abstract public function populate();
+    abstract protected function populate();
 
     /**
      * Index document

@@ -61,7 +61,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new Definition(DataProviderInterface::class);
         $definition->addTag(
-            'elasticsearch_dataprovider.provider', 
+            'elasticsearch.dataprovider', 
             ['index' => $index, 'type' => $type]
         );
         
@@ -77,7 +77,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         
         $definition = new Definition(\stdClass::class);
         $definition->addTag(
-            'elasticsearch_dataprovider.provider', 
+            'elasticsearch.dataprovider', 
             ['index' => 'foo', 'type' => 'bar']
         );
         
@@ -100,7 +100,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         
         $definition = new Definition(DataProviderInterface::class);
         $definition->addTag(
-            'elasticsearch_dataprovider.provider', 
+            'elasticsearch.dataprovider', 
             ['type' => 'my-type']
         );
         
