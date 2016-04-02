@@ -3,6 +3,7 @@
 namespace GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler;
 
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -12,7 +13,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * 
  * @author gbprod <contact@gb-prod.fr>
  */
-class DataProviderCompilerPass extends \PHPUnit_Framework_TestCase
+class DataProviderCompilerPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
