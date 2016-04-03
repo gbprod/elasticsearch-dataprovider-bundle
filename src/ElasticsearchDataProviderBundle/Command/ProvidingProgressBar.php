@@ -84,7 +84,8 @@ class ProvidingProgressBar
     
     public function onFinishedProviding(HasFinishedProviding $event)
     {
-        $progressBar->finish();
+        $this->progressBar->finish();
+        $this->output->writeln('');
         $this->progressBar = null;
     }
 
