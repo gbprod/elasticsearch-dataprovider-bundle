@@ -7,6 +7,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedHandling;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedProviding;
+use GBProd\ElasticsearchDataProviderBundle\Event\HasFinishedProviding;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasIndexedDocument;
 
 /**
@@ -34,6 +35,8 @@ class ProvidingProgressBar
         EventDispatcherInterface $dispatcher, 
         OutputInterface $output
     ) {
+        $this->output = $output;
+        
         $dispatcher->addListener(
             'elasticsearch.has_started_handling',
             [$this, 'onStartedHandling']
@@ -42,6 +45,11 @@ class ProvidingProgressBar
         $dispatcher->addListener(
             'elasticsearch.has_started_providing',
             [$this, 'onStartedProviding']
+        );
+        
+        $dispatcher->addListener(
+            'elasticsearch.has_finished_providing',
+            [$this, 'onFinishedProviding']
         );
         
         $dispatcher->addListener(
@@ -65,15 +73,19 @@ class ProvidingProgressBar
             get_class($event->getEntry()->getProvider())
         ));
         
-        if (null !== $this->progressBar) {
-            $progressBar->finish();
-        }
-        
-        $this->progressBar = null;
         $count = $event->getEntry()->getProvider()->count();
         if (null !== $count) {
-            $this->progressBar = new ProgressBar($output, $count);
+            $this->progressBar = new ProgressBar($this->output, $count);
+            $this->progressBar->setFormat(
+                ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%'
+            );
         } 
+    }
+    
+    public function onFinishedProviding(HasFinishedProviding $event)
+    {
+        $progressBar->finish();
+        $this->progressBar = null;
     }
 
     public function onIndexedDocument(HasIndexedDocument $event) 

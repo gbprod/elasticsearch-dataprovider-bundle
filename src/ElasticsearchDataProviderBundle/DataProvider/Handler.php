@@ -6,6 +6,7 @@ use Elasticsearch\Client;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedHandling;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedProviding;
+use GBProd\ElasticsearchDataProviderBundle\Event\HasFinishedProviding;
 
 /**
  * Handle data providing
@@ -54,6 +55,8 @@ class Handler
                 $entry->getType(),
                 $this->dispatcher
             );
+
+            $this->dispatchProvidingFinishedEvent($entry);
         }
     }
     
@@ -73,6 +76,16 @@ class Handler
             $this->dispatcher->dispatch(
                 'elasticsearch.has_started_providing',
                 new HasStartedProviding($entry)
+            );
+        }
+    }
+    
+    private function dispatchProvidingFinishedEvent(RegistryEntry $entry)
+    {
+        if ($this->dispatcher) {
+            $this->dispatcher->dispatch(
+                'elasticsearch.has_finished_providing',
+                new HasFinishedProviding($entry)
             );
         }
     }
