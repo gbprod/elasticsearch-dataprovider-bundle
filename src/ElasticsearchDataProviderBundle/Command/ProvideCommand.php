@@ -8,8 +8,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Container;
-use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedHandling;
-use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedProviding;
 
 /**
  * Command to run providing
@@ -61,7 +59,7 @@ class ProvideCommand extends ContainerAwareCommand
         $type  = $input->getArgument('type');
 
         $output->writeln(sprintf(
-            '<info>Providing <comment>%s/%s</comment> for client <comment>%s</comment>...</info>',
+            '<info>Providing <comment>%s/%s</comment> for client <comment>%s</comment></info>',
             $index ?: '*',
             $type ?: '*',
             $input->getOption('client')
@@ -95,34 +93,6 @@ class ProvideCommand extends ContainerAwareCommand
     {
         $dispatcher = $this->getContainer()->get('event_dispatcher');
         
-        $dispatcher->addListener(
-            'elasticsearch.has_started_handling',
-            function (HasStartedHandling $event) use ($output) {
-                $output->writeln(sprintf(
-                    '<info>Start running <comment>%d</comment> providers</info>', 
-                    count($event->getEntries())
-                ));
-            }
-        );
-
-        $dispatcher->addListener(
-            'elasticsearch.has_started_providing',
-            function (HasStartedProviding $event) use ($output) {
-                $output->writeln(sprintf(
-                    '<info>Start running <comment>%s</comment> provider</info>',
-                    get_class($event->getEntry()->getProvider())
-                ));
-            }
-        );
-        
-        $dispatcher->addListener(
-            'elasticsearch.has_indexed_document',
-            function (HasIndexingDocument $event) use ($output) {
-                $output->writeln(sprintf(
-                    '<info>Indexing <comment>%s</comment> document</info>',
-                    get_class($event->getEntry()->getId())
-                ));
-            }
-        );
+        new ProvidingProgressBar($dispatcher, $output);
     }
 }
