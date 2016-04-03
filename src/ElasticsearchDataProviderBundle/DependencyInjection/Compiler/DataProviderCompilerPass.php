@@ -3,6 +3,7 @@
 namespace GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler;
 
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -89,10 +90,14 @@ class DataProviderCompilerPass implements CompilerPassInterface
     
     private function registerProvider($registry, $providerId, $tag)
     {
-       $registry->addMethodCall('addProvider', [
-            new Reference($providerId),
-            $tag['index'], 
-            $tag['type']
-        ]);
+        $entryDefinition = new Definition(
+            RegistryEntry::class,
+            [
+                new Reference($providerId),
+                $tag['index'], 
+                $tag['type']
+            ]
+        );
+        $registry->addMethodCall('add', [$entryDefinition]);
     }
 }

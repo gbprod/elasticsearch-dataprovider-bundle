@@ -47,14 +47,12 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         $this->testedInstance->process($this->container);
 
         $calls = $this->registryDefinition->getMethodCalls();
-        
-        $this->assertEquals('addProvider', $calls[0][0]);
-        $this->assertEquals('foo', $calls[0][1][1]);
-        $this->assertEquals('bar', $calls[0][1][2]);
 
-        $this->assertEquals('addProvider', $calls[1][0]);
-        $this->assertEquals('fizz', $calls[1][1][1]);
-        $this->assertEquals('buzz', $calls[1][1][2]);
+        $this->assertEquals('add', $calls[0][0]);
+        $this->assertInstanceOf(Definition::class, $calls[0][1][0]);
+
+        $this->assertEquals('add', $calls[1][0]);
+        $this->assertInstanceOf(Definition::class, $calls[1][1][0]);
     }
     
     private function newDataProviderDefinition($index, $type)
