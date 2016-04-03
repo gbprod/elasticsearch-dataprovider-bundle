@@ -25,4 +25,11 @@ interface DataProviderInterface
         $type, 
         EventDispatcherInterface $dispatcher
     );
+    
+    /**
+     * Number of documents that should be indexed
+     * 
+     * @return int
+     */
+    public function count();
 }

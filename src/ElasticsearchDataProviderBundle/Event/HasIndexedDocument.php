@@ -23,4 +23,9 @@ class HasIndexedDocument extends Event
     {
         $this->id = $id;
     }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
 }

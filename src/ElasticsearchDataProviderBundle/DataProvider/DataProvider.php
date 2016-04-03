@@ -77,4 +77,12 @@ abstract class DataProvider implements DataProviderInterface
             new HasIndexedDocument($id)
         );
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return null;
+    }
 }    
