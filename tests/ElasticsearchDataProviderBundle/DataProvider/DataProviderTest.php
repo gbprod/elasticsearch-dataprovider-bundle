@@ -4,6 +4,7 @@ namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use Elasticsearch\Client;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Tests for abstract data provider
@@ -21,7 +22,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          ->method('populate')
       ;
       
-      $provider->run($this->getClient(), 'index', 'type');
+      $provider->run(
+         $this->getClient(), 
+         'index', 
+         'type',
+         $this->getMock(EventDispatcherInterface::class)
+      );
    }
    
    private function getClient()
@@ -64,6 +70,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          )
       ;
       
-      $provider->run($client, 'my_index', 'my_type');
+      $provider->run(
+         $client, 
+         'my_index', 
+         'my_type',
+         $this->getMock(EventDispatcherInterface::class)
+      );
    }
 }

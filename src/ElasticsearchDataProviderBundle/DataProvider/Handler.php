@@ -4,6 +4,8 @@ namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use Elasticsearch\Client;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedHandling;
+use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedProviding;
 
 /**
  * Handle data providing
@@ -49,7 +51,8 @@ class Handler
             $entry->getProvider()->run(
                 $client, 
                 $entry->getIndex(), 
-                $entry->getType()
+                $entry->getType(),
+                $this->dispatcher
             );
         }
     }

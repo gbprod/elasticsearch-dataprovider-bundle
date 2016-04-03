@@ -3,6 +3,7 @@
 namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use Elasticsearch\Client;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Interface for dataprovider
@@ -18,5 +19,10 @@ interface DataProviderInterface
      * @index string $index
      * @index string $type
      */
-    public function run(Client $client, $index, $type);
+    public function run(
+        Client $client, 
+        $index, 
+        $type, 
+        EventDispatcherInterface $dispatcher
+    );
 }
