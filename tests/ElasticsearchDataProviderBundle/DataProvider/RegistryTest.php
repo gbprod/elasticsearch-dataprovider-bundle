@@ -3,7 +3,7 @@
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
 
 /**
  * Tests for DataProvider registry
@@ -23,76 +23,45 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [], 
-            $this->testedInstance->getProviders()
+            $this->testedInstance->get()
         );
     }
     
-    public function testGetProvidersReturnAllProviders()
+    public function testGetReturnMatchingEntries()
     {
-        $provider1 = $this->getMock(DataProviderInterface::class);
-        $provider2 = $this->getMock(DataProviderInterface::class);
-        $provider3 = $this->getMock(DataProviderInterface::class);
+        $entry1 = $this->newRegistryMatching(true);
+        $entry2 = $this->newRegistryMatching(false);
+        $entry3 = $this->newRegistryMatching(true);
         
         $this->testedInstance
-            ->addProvider($provider1, 'index', 'type1')
-            ->addProvider($provider2, 'index', 'type2')
-            ->addProvider($provider3, 'index2', 'type')
+            ->add($entry1)
+            ->add($entry2)
+            ->add($entry3)
         ;
         
-        $providers = $this->testedInstance->getProviders();
+        $entries = $this->testedInstance->get();
         
-        $this->assertCount(3, $providers);
+        $this->assertCount(2, $entries);
         
-        $this->assertContains($provider1, $providers);
-        $this->assertContains($provider2, $providers);
-        $this->assertContains($provider3, $providers);
+        $this->assertContains($entry1, $entries);
+        $this->assertNotContains($entry2, $entries);
+        $this->assertContains($entry3, $entries);
     }
     
-    public function testGetProvidersReturnProvidersForAnIndex()
+    private function newRegistryMatching($matching)
     {
-        $provider1 = $this->getMock(DataProviderInterface::class);
-        $provider2 = $this->getMock(DataProviderInterface::class);
-        $provider3 = $this->getMock(DataProviderInterface::class);
-        $provider4 = $this->getMock(DataProviderInterface::class);
-        
-        $this->testedInstance
-            ->addProvider($provider1, 'index2', 'type')
-            ->addProvider($provider2, 'index', 'type')
-            ->addProvider($provider3, 'index2', 'type')
-            ->addProvider($provider4, 'index', 'type2')
+        $entry = $this
+            ->getMockBuilder(RegistryEntry::class)
+            ->disableOriginalConstructor()
+            ->getMock()
         ;
-        
-        $providers = $this->testedInstance->getProviders('index');
-        
-        $this->assertCount(2, $providers);
-        
-        $this->assertNotContains($provider1, $providers);
-        $this->assertContains($provider2, $providers);
-        $this->assertNotContains($provider3, $providers);
-        $this->assertContains($provider4, $providers);
-    }
     
-    public function testGetProvidersReturnProvidersForAnIndexAndAType()
-    {
-        $provider1 = $this->getMock(DataProviderInterface::class);
-        $provider2 = $this->getMock(DataProviderInterface::class);
-        $provider3 = $this->getMock(DataProviderInterface::class);
-        $provider4 = $this->getMock(DataProviderInterface::class);
-        
-        $this->testedInstance
-            ->addProvider($provider1, 'index', 'type2')
-            ->addProvider($provider2, 'index2', 'type2')
-            ->addProvider($provider3, 'index2', 'type')
-            ->addProvider($provider4, 'index', 'type')
+        $entry
+            ->expects($this->any())
+            ->method('match')
+            ->willReturn($matching)
         ;
         
-        $providers = $this->testedInstance->getProviders('index', 'type');
-        
-        $this->assertCount(1, $providers);
-        
-        $this->assertNotContains($provider1, $providers);
-        $this->assertNotContains($provider2, $providers);
-        $this->assertNotContains($provider3, $providers);
-        $this->assertContains($provider4, $providers);
+        return $entry;
     }
 }

@@ -29,10 +29,14 @@ class Handler
      */
     public function handle(Client $client, $index, $type)
     {
-        $providers = $this->registry->getProviders($index, $type);
+        $entries = $this->registry->get($index, $type);
         
-        foreach($providers as $provider) {
-            $provider->run($client, $index, $type);
+        foreach($entries as $entry) {
+            $entry->getProvider()->run(
+                $client, 
+                $entry->getIndex(), 
+                $entry->getType()
+            );
         }
     }
 }

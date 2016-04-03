@@ -10,69 +10,37 @@ namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 class Registry
 {
     /**
-     * @var array<DataProviderInterface>
+     * @var array<RegistryEntry>
      */
-    private $providers = [];
+    private $entries = [];
     
     /**
-     * Add a provider to the registry
+     * Add a entry to the registry
      * 
-     * @param DataProviderInterface $provider
-     * @param string                $index
-     * @param string                $type
+     * @param RegistryEntry $entry
      */
-    public function addProvider(DataProviderInterface $provider, $index, $type)
+    public function add(RegistryEntry $entry)
     {
-        $this->providers[] = [
-            'provider' => $provider,
-            'index'    => $index,
-            'type'     => $type,
-        ];
+        $this->entries[] = $entry;
         
         return $this;    
     }
     
     /**
-     * Get providers for index and type
+     * Get entries for index and type
      * 
      * @param string $index
      * @param string $type
      * 
-     * @return array<DataProviderInterface>
+     * @return array<ProviderEntry>
      */
-    public function getProviders($index = null, $type = null)
-    {
-        $filteredProviders = $this->filter($index, $type);
-        
-        return $this->mapProviders($filteredProviders);
-    }
-    
-    private function filter($index, $type)
+    public function get($index = null, $type = null)
     {
         return array_filter(
-            $this->providers,
-            function ($providerData) use ($index, $type) {
-                return $this->match($providerData, $index, $type);
+            $this->entries,
+            function ($entry) use ($index, $type) {
+                return $entry->match($index, $type);
             }
-        );
-    }
-
-    private function match($providerData, $index, $type)
-    {
-        return (null === $index && $type === null)
-            || ($providerData['index'] == $index && $type === null)
-            || ($providerData['index'] == $index && $providerData['type'] == $type)
-        ;
-    
-    }
-    
-    private function mapProviders(array $providers)
-    {
-        return array_map(
-            function ($providerData) {
-                return $providerData['provider'];    
-            },
-            $providers
         );
     }
 }

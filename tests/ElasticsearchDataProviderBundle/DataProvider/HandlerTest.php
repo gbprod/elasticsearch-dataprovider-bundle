@@ -3,6 +3,7 @@
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler;
 use Elasticsearch\Client;
@@ -14,39 +15,52 @@ use Elasticsearch\Client;
  */
 class HandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHandlerRunEveryProviders()
+    private $client;
+    private $registry;
+    
+    public function setUp()
     {
-        $client = $this
+        $this->client = $this
             ->getMockBuilder(Client::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;
         
-        $registry = $this->getMock(Registry::class);
-        $registry
-            ->expects($this->any())
-            ->method('getProviders')
-            ->with('my_index', 'my_type')
-            ->willReturn([
-                $this->createProviderExpectingRun($client, 'my_index', 'my_type'),
-                $this->createProviderExpectingRun($client, 'my_index', 'my_type'),
-                $this->createProviderExpectingRun($client, 'my_index', 'my_type'),
-            ])
-        ;
-        
-        $handler = new Handler($registry);
-        
-        $handler->handle($client, 'my_index', 'my_type');
+        $this->registry = new Registry();
     }
     
-    private function createProviderExpectingRun($client, $index, $type)
+    public function testHandlerRunEveryProviders()
+    {
+        $this->registry
+            ->add(
+                new RegistryEntry(
+                    $this->createProviderExpectingRun('my_index', 'my_type'),
+                    'my_index', 
+                    'my_type'
+                )
+            )
+            ->add(
+                new RegistryEntry(
+                    $this->createProviderExpectingRun('my_index', 'my_type_2'),
+                    'my_index', 
+                    'my_type_2'
+                )
+            )
+        ;
+        
+        $handler = new Handler($this->registry);
+        
+        $handler->handle($this->client, 'my_index', null);
+    }
+    
+    private function createProviderExpectingRun($index, $type)
     {
         $provider = $this->getMock(DataProviderInterface::class);
         
         $provider
             ->expects($this->once())
             ->method('run')
-            ->with($client, $index, $type)
+            ->with($this->client, $index, $type)
         ;
         
         return $provider;    
