@@ -6,6 +6,7 @@
         "m6web/elasticsearch-bundle": "^1.0",
         "symfony/framework-bundle": "^2.3|^3.0",
         "symfony/console": "^2.3|^3.0",
+        "symfony/event-dispatcher": "^2.3|^3.0",
         "symfony/expression-language": "^2.4|^3.0"
     },
     "require-dev": {
@@ -28,5 +29,8 @@
         "psr-4": {
             "Tests\\GBProd\\": "tests/"
         }
+    },
+    "suggest": {
+        "gbprod/elasticsearch-extra-bundle": "Elasticsearch indices managment tools"
     }
 }

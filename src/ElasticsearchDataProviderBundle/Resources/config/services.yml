@@ -6,3 +6,4 @@ services:
         class: GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler
         arguments:
             - '@gbprod.elasticsearch_dataprovider.registry'
+            - '@event_dispatcher'

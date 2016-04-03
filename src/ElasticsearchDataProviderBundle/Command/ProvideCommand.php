@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Command to run providing
@@ -64,6 +65,8 @@ class ProvideCommand extends ContainerAwareCommand
             $input->getOption('client')
         ));
         
+        $this->initializeProgress($output);
+        
         $handler->handle($client, $index, $type);
     }
     
@@ -84,5 +87,30 @@ class ProvideCommand extends ContainerAwareCommand
         }
         
         return $client;
+    }
+    
+    private function initializeProgress(OutputInterface $output)
+    {
+        $dispatcher = $this->getContainer()->get('event_dispatcher');
+        
+        $dispatcher->addListener(
+            'elasticsearch.has_started_handling',
+            function (HasStartedHandling $event) use ($output) {
+                $output->writeln(sprintf(
+                    '<info>Start running <comment>%d</comment> providers</info', 
+                    count($event->getEntries())
+                ));
+            }
+        );
+
+        $dispatcher->addListener(
+            'elasticsearch.has_started_providing',
+            function (HasStartedProviding $event) use ($output) {
+                $output->writeln(sprintf(
+                    '<info>Start running <comment>%s</comment> provider</info',
+                    get_class($event->getEntry()->getProvider())
+                ));
+            }
+        );
     }
 }

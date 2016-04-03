@@ -2,10 +2,11 @@
 
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use GBProd\ElasticsearchDataProviderBundle\DependencyInjection\ElasticsearchDataProviderExtension;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry;
+use GBProd\ElasticsearchDataProviderBundle\DependencyInjection\ElasticsearchDataProviderExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Tests for ElasticsearchDataProviderExtension
@@ -24,6 +25,11 @@ class ElasticsearchDataProviderExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new ContainerBuilder();
         $this->container->registerExtension($this->extension);
+        
+        $this->container->set(
+            'event_dispatcher',
+            $this->getMock(EventDispatcherInterface::class)
+        );
         
         $this->container->loadFromExtension($this->extension->getAlias());
         $this->container->compile();

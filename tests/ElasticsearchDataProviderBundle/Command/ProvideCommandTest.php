@@ -2,12 +2,13 @@
 
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\Command;
 
+use Elasticsearch\Client;
 use GBProd\ElasticsearchDataProviderBundle\Command\ProvideCommand;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\Container;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler;
-use Elasticsearch\Client;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Tests for ProvideCommand
@@ -39,6 +40,12 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
         $container->set(
             'gbprod.elasticsearch_dataprovider.handler',
             $this->handler
+        );
+        
+        
+        $container->set(
+            'event_dispatcher',
+            $this->getMock(EventDispatcherInterface::class)
         );
         
         $this->client = $this
