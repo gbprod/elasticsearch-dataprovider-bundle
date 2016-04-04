@@ -81,7 +81,7 @@ services:
     acme_bundle.superhero_dataprovider:
         class: GBProd\AcmeBundle\DataProvider\SuperHeroDataProvider
         tags:
-            - { name: elasticsearch.data_provider, index: app, type: superheros }
+            - { name: elasticsearch.dataprovider, index: app, type: superheros }
 ```
 
 ### Provide
