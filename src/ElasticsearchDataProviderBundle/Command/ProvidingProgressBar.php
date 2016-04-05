@@ -17,6 +17,8 @@ use GBProd\ElasticsearchDataProviderBundle\Event\HasIndexedDocument;
  */
 class ProvidingProgressBar
 {
+    const PROGRESS_BAR_TEMPLATE = ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%';
+    
     /**
      * @var OutputInterface
      */
@@ -69,16 +71,14 @@ class ProvidingProgressBar
     public function onStartedProviding(HasStartedProviding $event)
     {
         $this->output->writeln(sprintf(
-            '<info>Start running <comment>%s</comment> provider</info>',
+            '<info> - Running <comment>%s</comment> provider</info>',
             get_class($event->getEntry()->getProvider())
         ));
         
         $count = $event->getEntry()->getProvider()->count();
         if (null !== $count) {
             $this->progressBar = new ProgressBar($this->output, $count);
-            $this->progressBar->setFormat(
-                ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%'
-            );
+            $this->progressBar->setFormat(self::PROGRESS_BAR_TEMPLATE);
         } 
     }
     

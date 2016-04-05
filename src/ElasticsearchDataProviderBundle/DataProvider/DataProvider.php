@@ -13,6 +13,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 abstract class DataProvider implements DataProviderInterface
 {
+    const BATCH_SIZE = 1000;
+    
     /**
      * @var Client
      */
@@ -34,6 +36,11 @@ abstract class DataProvider implements DataProviderInterface
     private $dispatcher;
 
     /**
+     * @var int
+     */
+    private $currentBulkSize;
+
+    /**
      * {@inheritdoc}
      */
     public function run(
@@ -47,7 +54,12 @@ abstract class DataProvider implements DataProviderInterface
         $this->type       = $type;
         $this->dispatcher = $dispatcher;
         
+        $this->currentBulkSize = 0;
+        $this->currentBulk     = ['body' => []];
+        
         $this->populate();
+    
+        $this->flushBulk();
     }
 
     /**
@@ -65,17 +77,39 @@ abstract class DataProvider implements DataProviderInterface
      */
     public function index($id, array $body)
     {
-        $this->client->index([
-            'index' => $this->index,
-            'type'  => $this->type,
-            'id'    => $id,
-            'body'  => $body,
-        ]);
+        $this->currentBulk['body'][] = [
+            'index' => [
+                '_index' => $this->index,
+                '_type'  => $this->type,
+                '_id'    => $id,
+            ]
+        ];
+    
+        $this->currentBulk['body'][] = $body;
+        
+        if ($this->shouldFlushBulk()) {
+            $this->flushBulk();
+        }
+        
+        $this->currentBulkSize++;
         
         $this->dispatcher->dispatch(
             'elasticsearch.has_indexed_document',
             new HasIndexedDocument($id)
         );
+    }
+    
+    protected function flushBulk()
+    {
+        $this->client->bulk($this->currentBulk);
+
+        $this->currentBulkSize = 0;
+        $this->currentBulk     = ['body' => []];
+    }
+    
+    private function shouldFlushBulk()
+    {
+        return $this->currentBulkSize >= self::BATCH_SIZE;
     }
     
     /**

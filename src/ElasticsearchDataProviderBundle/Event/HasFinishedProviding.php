@@ -12,13 +12,24 @@ use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
  */
 class HasFinishedProviding extends Event
 {
+    /**
+     * @var RegistryEntry
+     */
     private $entry;
     
+    /**
+     * @param RegistryEntry $entry
+     */
     public function __construct(RegistryEntry $entry)
     {
         $this->entry = $entry;
     }
     
+    /**
+     * Get entry
+     * 
+     * @return RegistryEntry
+     */
     public function getEntry()
     {
         return $this->entry;
