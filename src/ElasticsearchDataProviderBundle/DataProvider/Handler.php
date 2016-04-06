@@ -10,7 +10,7 @@ use GBProd\ElasticsearchDataProviderBundle\Event\HasFinishedProviding;
 
 /**
  * Handle data providing
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class Handler
@@ -19,39 +19,39 @@ class Handler
      * @var Registry
      */
     private $registry;
-    
+
     /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
-    
+
     /**
      * @param Registry                      $registry
      * @param EventDispatcherInterface|null $dispatcher
      */
     public function __construct(
-        Registry $registry, 
+        Registry $registry,
         EventDispatcherInterface $dispatcher = null
     ) {
         $this->registry   = $registry;
         $this->dispatcher = $dispatcher;
     }
-    
+
     /**
      * Handle provide command
      */
     public function handle(Client $client, $index, $type)
     {
         $entries = $this->registry->get($index, $type);
-        
+
         $this->dispatchHandlingStartedEvent($entries);
-        
+
         foreach($entries as $entry) {
             $this->dispatchProvidingStartedEvent($entry);
-    
+
             $entry->getProvider()->run(
-                $client, 
-                $entry->getIndex(), 
+                $client,
+                $entry->getIndex(),
                 $entry->getType(),
                 $this->dispatcher
             );
@@ -59,7 +59,7 @@ class Handler
             $this->dispatchProvidingFinishedEvent($entry);
         }
     }
-    
+
     private function dispatchHandlingStartedEvent(array $entries)
     {
         if ($this->dispatcher) {
@@ -69,7 +69,7 @@ class Handler
             );
         }
     }
-    
+
     private function dispatchProvidingStartedEvent(RegistryEntry $entry)
     {
         if ($this->dispatcher) {
@@ -79,7 +79,7 @@ class Handler
             );
         }
     }
-    
+
     private function dispatchProvidingFinishedEvent(RegistryEntry $entry)
     {
         if ($this->dispatcher) {

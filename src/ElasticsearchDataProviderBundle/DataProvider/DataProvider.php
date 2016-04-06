@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 abstract class DataProvider implements DataProviderInterface
 {
     const BATCH_SIZE = 1000;
-    
+
     /**
      * @var Client
      */
@@ -29,11 +29,16 @@ abstract class DataProvider implements DataProviderInterface
      * @var string
      */
     private $type;
-    
+
     /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
+
+    /**
+     * @var array
+     */
+    private $currentBulk;
 
     /**
      * @var int
@@ -44,21 +49,21 @@ abstract class DataProvider implements DataProviderInterface
      * {@inheritdoc}
      */
     public function run(
-        Client $client, 
-        $index, 
-        $type, 
+        Client $client,
+        $index,
+        $type,
         EventDispatcherInterface $dispatcher
     ) {
         $this->client     = $client;
         $this->index      = $index;
         $this->type       = $type;
         $this->dispatcher = $dispatcher;
-        
+
         $this->currentBulkSize = 0;
         $this->currentBulk     = ['body' => []];
-        
+
         $this->populate();
-    
+
         $this->flushBulk();
     }
 
@@ -84,21 +89,21 @@ abstract class DataProvider implements DataProviderInterface
                 '_id'    => $id,
             ]
         ];
-    
+
         $this->currentBulk['body'][] = $body;
-        
+
         if ($this->shouldFlushBulk()) {
             $this->flushBulk();
         }
-        
+
         $this->currentBulkSize++;
-        
+
         $this->dispatcher->dispatch(
             'elasticsearch.has_indexed_document',
             new HasIndexedDocument($id)
         );
     }
-    
+
     protected function flushBulk()
     {
         $this->client->bulk($this->currentBulk);
@@ -106,12 +111,12 @@ abstract class DataProvider implements DataProviderInterface
         $this->currentBulkSize = 0;
         $this->currentBulk     = ['body' => []];
     }
-    
+
     private function shouldFlushBulk()
     {
         return $this->currentBulkSize >= self::BATCH_SIZE;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -119,4 +124,4 @@ abstract class DataProvider implements DataProviderInterface
     {
         return null;
     }
-}    
+}

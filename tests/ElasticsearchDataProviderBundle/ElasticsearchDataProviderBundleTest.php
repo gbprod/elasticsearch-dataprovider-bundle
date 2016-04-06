@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Tests for Bundle
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class ElasticsearchDataProviderBundleTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class ElasticsearchDataProviderBundleTest extends \PHPUnit_Framework_TestCase
             new ElasticsearchDataProviderBundle()
         );
     }
-        
+
     public function testBuildAddCompilerPass()
     {
         $container = $this->getMock(ContainerBuilder::class);
@@ -29,7 +29,7 @@ class ElasticsearchDataProviderBundleTest extends \PHPUnit_Framework_TestCase
             ->method('addCompilerPass')
             ->with($this->isInstanceOf(DataProviderCompilerPass::class))
         ;
-        
+
         $bundle = new ElasticsearchDataProviderBundle();
         $bundle->build($container);
     }

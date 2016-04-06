@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Tests for abstract data provider
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
@@ -16,20 +16,23 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
    public function testRunExecutePopulate()
    {
       $provider = $this->getMockForAbstractClass(DataProvider::class);
-      
+
       $provider
          ->expects($this->once())
          ->method('populate')
       ;
-      
+
       $provider->run(
-         $this->getClient(), 
-         'index', 
+         $this->getClient(),
+         'index',
          'type',
          $this->getMock(EventDispatcherInterface::class)
       );
    }
-   
+
+   /**
+    * @return Client
+    */
    private function getClient()
    {
       return $this
@@ -38,17 +41,17 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          ->getMock()
       ;
    }
-   
+
    public function testIndexWithIndexAndType()
    {
       $provider = $this->getMockForAbstractClass(DataProvider::class);
-      
+
       $client = $this->getClient();
       $client
          ->expects($this->once())
          ->method('bulk')
          ->with([
-            'body' => 
+            'body' =>
             [
                [
                   'index' => [
@@ -63,7 +66,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ]
          ]
       );
-      
+
       $provider
          ->expects($this->once())
          ->method('populate')
@@ -71,32 +74,32 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback(
                function () use ($provider) {
                   $provider->index(
-                     'my_id', 
+                     'my_id',
                      ['foo' => 'bar']
-                  );   
+                  );
                }
             )
          )
       ;
-      
+
       $provider->run(
-         $client, 
-         'my_index', 
+         $client,
+         'my_index',
          'my_type',
          $this->getMock(EventDispatcherInterface::class)
       );
    }
-   
+
    public function testIndexRunBulkTwiceIfMoreThanBatchSize()
    {
       $provider = $this->getMockForAbstractClass(DataProvider::class);
-      
+
       $client = $this->getClient();
       $client
          ->expects($this->exactly(2))
          ->method('bulk')
       ;
-      
+
       $provider
          ->expects($this->once())
          ->method('populate')
@@ -105,7 +108,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                function () use ($provider) {
                   for($i = 0; $i < 1500; $i++) {
                      $provider->index(
-                        'my_id', 
+                        'my_id',
                         ['foo' => 'bar']
                      );
                   }
@@ -113,10 +116,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             )
          )
       ;
-      
+
       $provider->run(
-         $client, 
-         'my_index', 
+         $client,
+         'my_index',
          'my_type',
          $this->getMock(EventDispatcherInterface::class)
       );

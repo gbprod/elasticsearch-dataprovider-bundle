@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Tests for ElasticsearchDataProviderExtension
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class ElasticsearchDataProviderExtensionTest extends \PHPUnit_Framework_TestCase
@@ -25,16 +25,16 @@ class ElasticsearchDataProviderExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new ContainerBuilder();
         $this->container->registerExtension($this->extension);
-        
+
         $this->container->set(
             'event_dispatcher',
             $this->getMock(EventDispatcherInterface::class)
         );
-        
+
         $this->container->loadFromExtension($this->extension->getAlias());
         $this->container->compile();
     }
-    
+
     /**
      * @dataProvider getServices
      */
@@ -43,21 +43,21 @@ class ElasticsearchDataProviderExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->container->has($serviceId)
         );
-        
+
         $service = $this->container->get($serviceId);
-        
+
         $this->assertInstanceOf($classname, $service);
     }
-    
+
     public function getServices()
     {
         return [
             [
-                'gbprod.elasticsearch_dataprovider.registry', 
+                'gbprod.elasticsearch_dataprovider.registry',
                 Registry::class,
-            ], 
+            ],
             [
-                'gbprod.elasticsearch_dataprovider.handler', 
+                'gbprod.elasticsearch_dataprovider.handler',
                 Handler::class,
             ],
         ];

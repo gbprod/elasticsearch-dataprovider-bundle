@@ -15,20 +15,23 @@ interface DataProviderInterface
     /**
      * Populate index
      *
-     * @param Client $client
-     * @index string $index
-     * @index string $type
+     * @param Client                   $client
+     * @param string                   $index
+     * @param string                   $type
+     * @param EventDispatcherInterface $dispatcher
+     *
+     * @return void
      */
     public function run(
-        Client $client, 
-        $index, 
-        $type, 
+        Client $client,
+        $index,
+        $type,
         EventDispatcherInterface $dispatcher
     );
-    
+
     /**
      * Number of documents that should be indexed
-     * 
+     *
      * @return int
      */
     public function count();

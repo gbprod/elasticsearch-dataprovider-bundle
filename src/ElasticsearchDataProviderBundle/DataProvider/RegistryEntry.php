@@ -25,9 +25,9 @@ class RegistryEntry
     private $type;
 
     /**
-     * @param DataProvider $provider
-     * @param string       $index
-     * @param string       $type
+     * @param DataProviderInterface $provider
+     * @param string                $index
+     * @param string                $type
      */
     public function __construct(DataProviderInterface $provider, $index, $type)
     {
@@ -64,7 +64,7 @@ class RegistryEntry
     {
         return $this->type;
     }
-    
+
     public function match($index, $type)
     {
         return ($this->getIndex() == $index && $this->getType() == $type)

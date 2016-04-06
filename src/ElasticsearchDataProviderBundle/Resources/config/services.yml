@@ -1,7 +1,7 @@
 services:
     gbprod.elasticsearch_dataprovider.registry:
         class: GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry
-        
+
     gbprod.elasticsearch_dataprovider.handler:
         class: GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler
         arguments:

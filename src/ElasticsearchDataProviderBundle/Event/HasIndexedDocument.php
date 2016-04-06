@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Event triggered when a document has been indexed
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class HasIndexedDocument extends Event
@@ -14,8 +14,8 @@ class HasIndexedDocument extends Event
     /**
      * @var string
      */
-    private $id; 
-    
+    private $id;
+
     /**
      * @param string $id
      */
@@ -23,7 +23,12 @@ class HasIndexedDocument extends Event
     {
         $this->id = $id;
     }
-    
+
+    /**
+     * Get the id
+     *
+     * @return string
+     */
     public function getId()
     {
         return $this->id;

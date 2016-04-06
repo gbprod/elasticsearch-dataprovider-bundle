@@ -7,7 +7,7 @@ use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
 
 /**
  * Event triggered when providing has been Finished
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class HasFinishedProviding extends Event
@@ -16,7 +16,7 @@ class HasFinishedProviding extends Event
      * @var RegistryEntry
      */
     private $entry;
-    
+
     /**
      * @param RegistryEntry $entry
      */
@@ -24,10 +24,10 @@ class HasFinishedProviding extends Event
     {
         $this->entry = $entry;
     }
-    
+
     /**
      * Get entry
-     * 
+     *
      * @return RegistryEntry
      */
     public function getEntry()

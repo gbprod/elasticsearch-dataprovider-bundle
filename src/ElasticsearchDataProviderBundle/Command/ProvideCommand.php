@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Command to run providing
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class ProvideCommand extends ContainerAwareCommand
@@ -43,7 +43,7 @@ class ProvideCommand extends ContainerAwareCommand
             )
         ;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -52,9 +52,9 @@ class ProvideCommand extends ContainerAwareCommand
         $handler = $this->getContainer()
             ->get('gbprod.elasticsearch_dataprovider.handler')
         ;
-        
+
         $client = $this->getClient($input->getOption('client'));
-        
+
         $index = $input->getArgument('index');
         $type  = $input->getArgument('type');
 
@@ -64,12 +64,12 @@ class ProvideCommand extends ContainerAwareCommand
             $type ?: '*',
             $input->getOption('client')
         ));
-        
+
         $this->initializeProgress($output);
-        
+
         $handler->handle($client, $index, $type);
     }
-    
+
     private function getClient($clientName)
     {
         $client = $this->getContainer()
@@ -78,21 +78,21 @@ class ProvideCommand extends ContainerAwareCommand
                 $clientName
             ))
         ;
-        
+
         if (!$client) {
             throw new \InvalidArgumentException(sprintf(
                 'No client "%s" found',
                 $clientName
             ));
         }
-        
+
         return $client;
     }
-    
+
     private function initializeProgress(OutputInterface $output)
     {
         $dispatcher = $this->getContainer()->get('event_dispatcher');
-        
+
         new ProvidingProgressBar($dispatcher, $output);
     }
 }

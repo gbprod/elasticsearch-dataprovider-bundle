@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Compiler path to register DataProviders
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class DataProviderCompilerPass implements CompilerPassInterface
@@ -24,20 +24,20 @@ class DataProviderCompilerPass implements CompilerPassInterface
         if (!$container->hasDefinition('gbprod.elasticsearch_dataprovider.registry')) {
             return;
         }
-        
+
         $registry = $container->getDefinition(
             'gbprod.elasticsearch_dataprovider.registry'
         );
-        
+
         $providers = $container->findTaggedServiceIds(
             'elasticsearch.dataprovider'
         );
-        
+
         foreach ($providers as $providerId => $tags) {
             $this->processProvider($container, $registry, $providerId, $tags);
         }
     }
-    
+
     private function processProvider(ContainerBuilder $container, $registry, $providerId, $tags)
     {
         $this->validateIsAProvider($container, $providerId);
@@ -47,32 +47,32 @@ class DataProviderCompilerPass implements CompilerPassInterface
             $this->registerProvider($registry, $providerId, $tag);
         }
     }
-    
+
     private function validateIsAProvider(ContainerBuilder $container, $providerId)
     {
         if ($this->isNotAProvider($container->getDefinition($providerId))) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'DataProvider "%s" must implements DataProviderInterface.', 
+                    'DataProvider "%s" must implements DataProviderInterface.',
                     $providerId
                 )
             );
         }
     }
-        
+
     private function isNotAProvider(Definition $definition)
     {
         $reflection = new \ReflectionClass($definition->getClass());
 
         return !$reflection->implementsInterface(DataProviderInterface::class);
     }
-    
+
     private function validateTag($tag, $providerId)
     {
         if ($this->isTagIncorrect($tag)) {
             throw new \InvalidArgumentException(
                 sprintf('DataProvider "%s" must specify the "index"'.
-                    ' and "type" attribute.', 
+                    ' and "type" attribute.',
                     $providerId
                 )
             );
@@ -81,20 +81,20 @@ class DataProviderCompilerPass implements CompilerPassInterface
 
     private function isTagIncorrect($tag)
     {
-        return !isset($tag['type']) 
+        return !isset($tag['type'])
             || !isset($tag['index'])
             || empty($tag['index'])
             || empty($tag['type'])
         ;
     }
-    
+
     private function registerProvider($registry, $providerId, $tag)
     {
         $entryDefinition = new Definition(
             RegistryEntry::class,
             [
                 new Reference($providerId),
-                $tag['index'], 
+                $tag['index'],
                 $tag['type']
             ]
         );

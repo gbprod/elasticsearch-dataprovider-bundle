@@ -4,7 +4,7 @@ namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 /**
  * Registry for DataProvider
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class Registry
@@ -13,25 +13,25 @@ class Registry
      * @var array<RegistryEntry>
      */
     private $entries = [];
-    
+
     /**
      * Add a entry to the registry
-     * 
+     *
      * @param RegistryEntry $entry
      */
     public function add(RegistryEntry $entry)
     {
         $this->entries[] = $entry;
-        
-        return $this;    
+
+        return $this;
     }
-    
+
     /**
      * Get entries for index and type
-     * 
-     * @param string $index
-     * @param string $type
-     * 
+     *
+     * @param string|null $index
+     * @param string|null $type
+     *
      * @return array<ProviderEntry>
      */
     public function get($index = null, $type = null)

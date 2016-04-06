@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Tests for ProvideCommand
- * 
+ *
  * @author gbprod <contact@gb-prod.fr>
  */
 class ProvideCommandTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
     private $commandTester;
     private $handler;
     private $client;
-    
+
     public function setUp()
     {
         $application = new Application();
@@ -28,39 +28,39 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
 
         $command = $application->find('elasticsearch:provide');
         $this->commandTester = new CommandTester($command);
-        
+
         $this->handler = $this
             ->getMockBuilder(Handler::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        
+
         $container = new Container();
-        
+
         $container->set(
             'gbprod.elasticsearch_dataprovider.handler',
             $this->handler
         );
-        
-        
+
+
         $container->set(
             'event_dispatcher',
             $this->getMock(EventDispatcherInterface::class)
         );
-        
+
         $this->client = $this
             ->getMockBuilder(Client::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        
+
         $container->set(
             'm6web_elasticsearch.client.default',
             $this->client
         );
-        
+
         $command->setContainer($container);
-    }    
+    }
     public function testExecute()
     {
         $this->handler
@@ -68,7 +68,7 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->with($this->client, 'my_index', 'my_type')
         ;
-        
+
         $this->commandTester->execute([
             'command' => 'elasticsearch:provide',
             'index'   => 'my_index',
