@@ -71,8 +71,10 @@ class ProvidingProgressBar
     public function onStartedProviding(HasStartedProviding $event)
     {
         $this->output->writeln(sprintf(
-            '<info> - Running <comment>%s</comment> provider</info>',
-            get_class($event->getEntry()->getProvider())
+            '<info> - Running <comment>%s</comment> provider into <comment>%s/%s</comment></info>',
+            get_class($event->getEntry()->getProvider()),
+            $event->getEntry()->getIndex(),
+            $event->getEntry()->getType()
         ));
 
         $count = $event->getEntry()->getProvider()->count();
