@@ -2,13 +2,13 @@
 
 Bundle that can easily provide data in elasticsearch indices with Symfony using [M6Web elasticsearch bundle](https://github.com/M6Web/ElasticsearchBundle).
 
-[![Build Status](https://travis-ci.org/gbprod/elasticsearch-dataprovider-bundle.svg?branch=master)](https://travis-ci.org/gbprod/elasticsearch-dataprovider-bundle) 
+[![Build Status](https://travis-ci.org/gbprod/elasticsearch-dataprovider-bundle.svg?branch=master)](https://travis-ci.org/gbprod/elasticsearch-dataprovider-bundle)
 [![Code Coverage](https://scrutinizer-ci.com/g/gbprod/elasticsearch-dataprovider-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/gbprod/elasticsearch-dataprovider-bundle/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gbprod/elasticsearch-dataprovider-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gbprod/elasticsearch-dataprovider-bundle/?branch=master)
 
-[![Latest Stable Version](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/v/stable)](https://packagist.org/packages/gbprod/doctrine-specification) 
-[![Total Downloads](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/downloads)](https://packagist.org/packages/gbprod/doctrine-specification) 
-[![Latest Unstable Version](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/v/unstable)](https://packagist.org/packages/gbprod/doctrine-specification) 
+[![Latest Stable Version](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/v/stable)](https://packagist.org/packages/gbprod/doctrine-specification)
+[![Total Downloads](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/downloads)](https://packagist.org/packages/gbprod/doctrine-specification)
+[![Latest Unstable Version](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/v/unstable)](https://packagist.org/packages/gbprod/doctrine-specification)
 [![License](https://poser.pugx.org/gbprod/elasticsearch-dataprovider-bundle/license)](https://packagist.org/packages/gbprod/doctrine-specification)
 
 ## Installation
@@ -60,7 +60,7 @@ class SuperHeroDataProvider extends DataProvider
                 "description" => "Bitten by a radioactive spider, high school student Peter Parker gained the speed, strength and powers of a spider. Adopting the name Spider-Man, Peter hoped to start a career using his new abilities. Taught that with great power comes great responsibility, Spidey has vowed to use his powers to help people.",
             ]
         );
-        
+
         $this->index(
             'Hulk', // id of the document
             [
@@ -68,6 +68,11 @@ class SuperHeroDataProvider extends DataProvider
                 "description" => "Caught in a gamma bomb explosion while trying to save the life of a teenager, Dr. Bruce Banner was transformed into the incredibly powerful creature called the Hulk. An all too often misunderstood hero, the angrier the Hulk gets, the stronger the Hulk gets.",
             ]
         );
+    }
+
+    public function count()
+    {
+        return 2;
     }
 }
 ```
@@ -108,7 +113,7 @@ You can set a specific client to use (if not default):
 php app/console elasticsearch:provide app superheros --client=my_client
 ```
 
-## Example using doctrine
+### Example using doctrine
 
 ```php
 <?php
@@ -121,22 +126,20 @@ use Doctrine\ORM\EntityManager;
 class SuperHeroDataProvider extends DataProvider
 {
     private $em;
-    
+
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
-    
+
     protected function populate()
     {
-        $query = $this->em
-            ->createQuery('select s from AcmeBundle\Model\SuperHero s')
-        ;
-        
+        $query = $this->em->createQuery('SELECT s FROM AcmeBundle\Model\SuperHero s');
+
         $results = $query->iterate();
         foreach ($results as $row) {
             $this->index(
-                $row[0], 
+                $row[0],
                 [
                     "name" => $row[0],
                     "description" => $row[1],
@@ -145,6 +148,15 @@ class SuperHeroDataProvider extends DataProvider
 
             $this->em->detach($row[0]);
         }
+    }
+
+    public function count()
+    {
+            $query = $this->em
+            ->createQuery('SELECT COUNT(s.id) FROM AcmeBundle\Model\SuperHero s')
+        ;
+
+        return $query->getSingleScalarResult();
     }
 }
 ```
@@ -160,3 +172,7 @@ services:
         tags:
             - { name: elasticsearch.dataprovider, index: app, type: superheros }
 ```
+
+### About count method
+
+This is not mandatory to implements `count` method but it allows you to have a pretty progress bar during providing.
