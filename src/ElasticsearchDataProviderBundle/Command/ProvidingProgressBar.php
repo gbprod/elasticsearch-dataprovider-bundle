@@ -26,8 +26,10 @@ class ProvidingProgressBar
 
     /**
      * @var ProgressBar
+     *
+     * public for test...
      */
-    private $progressBar;
+    public $progressBar;
 
     /**
      * @param EventDispatcherInterface $dispatcher
@@ -62,10 +64,12 @@ class ProvidingProgressBar
 
     public function onStartedHandling(HasStartedHandling $event)
     {
-        $this->output->writeln(sprintf(
-            '<info>Start running <comment>%d</comment> providers</info>',
-            count($event->getEntries())
-        ));
+        $this->output->writeln(
+            sprintf(
+                '<info>Start running <comment>%d</comment> providers</info>',
+                count($event->getEntries())
+            )
+        );
     }
 
     public function onStartedProviding(HasStartedProviding $event)
@@ -84,17 +88,17 @@ class ProvidingProgressBar
         }
     }
 
-    public function onFinishedProviding(HasFinishedProviding $event)
-    {
-        $this->progressBar->finish();
-        $this->output->writeln('');
-        $this->progressBar = null;
-    }
-
     public function onIndexedDocument(HasIndexedDocument $event)
     {
         if ($this->progressBar) {
             $this->progressBar->advance();
         }
+    }
+
+    public function onFinishedProviding(HasFinishedProviding $event)
+    {
+        $this->progressBar->finish();
+        $this->output->writeln('');
+        $this->progressBar = null;
     }
 }

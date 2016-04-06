@@ -4,10 +4,11 @@ namespace GBProd\ElasticsearchDataProviderBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Command to run providing
@@ -72,11 +73,16 @@ class ProvideCommand extends ContainerAwareCommand
 
     private function getClient($clientName)
     {
+        $clientServiceName = sprintf(
+            'm6web_elasticsearch.client.%s',
+            $clientName
+        );
+
         $client = $this->getContainer()
-            ->get(sprintf(
-                'm6web_elasticsearch.client.%s',
-                $clientName
-            ))
+            ->get(
+                $clientServiceName,
+                ContainerInterface::NULL_ON_INVALID_REFERENCE
+            )
         ;
 
         if (!$client) {

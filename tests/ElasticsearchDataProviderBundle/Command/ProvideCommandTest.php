@@ -61,6 +61,7 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
 
         $command->setContainer($container);
     }
+
     public function testExecute()
     {
         $this->handler
@@ -75,4 +76,17 @@ class ProvideCommandTest extends \PHPUnit_Framework_TestCase
             'type'    => 'my_type',
         ]);
     }
+
+    public function testExecuteThrowExceptionIfClientNotFound()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+
+        $this->commandTester->execute([
+            'command'  => 'elasticsearch:provide',
+            'index'    => 'my_index',
+            'type'     => 'my_type',
+            '--client' => 'foo',
+        ]);
+    }
+
 }

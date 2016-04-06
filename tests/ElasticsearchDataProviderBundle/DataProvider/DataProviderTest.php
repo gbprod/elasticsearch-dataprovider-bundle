@@ -124,4 +124,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          $this->getMock(EventDispatcherInterface::class)
       );
    }
+
+   public function testCountIsNull()
+   {
+      $provider = $this->getMockForAbstractClass(DataProvider::class);
+
+      $this->assertNull($provider->count());
+   }
 }

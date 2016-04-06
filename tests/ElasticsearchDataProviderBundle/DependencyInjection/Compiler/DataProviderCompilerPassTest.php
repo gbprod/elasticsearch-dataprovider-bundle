@@ -111,4 +111,24 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
 
         $this->testedInstance->process($this->container);
     }
+
+    public function testNeverCallGetDefinitionIfServiceNotSet()
+    {
+        $container = $this->getMock(ContainerBuilder::class);
+
+        $container
+            ->expects($this->any())
+            ->method('hasDefinition')
+            ->with('gbprod.elasticsearch_dataprovider.registry')
+            ->willReturn(false)
+        ;
+
+        $container
+            ->expects($this->never())
+            ->method('getDefinition')
+            ->with('gbprod.elasticsearch_dataprovider.registry')
+        ;
+
+        $this->testedInstance->process($container);
+    }
 }
