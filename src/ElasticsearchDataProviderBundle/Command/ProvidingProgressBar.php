@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedHandling;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedProviding;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasFinishedProviding;
-use GBProd\ElasticsearchDataProviderBundle\Event\HasIndexedDocument;
+use GBProd\ElasticsearchDataProviderBundle\Event\HasProvidedDocument;
 
 /**
  * Progress bar for providing
@@ -27,7 +27,7 @@ class ProvidingProgressBar
     /**
      * @var ProgressBar
      *
-     * public for test...
+     * public for test purpose
      */
     public $progressBar;
 
@@ -52,13 +52,13 @@ class ProvidingProgressBar
         );
 
         $dispatcher->addListener(
-            'elasticsearch.has_finished_providing',
-            [$this, 'onFinishedProviding']
+            'elasticsearch.has_provided_document',
+            [$this, 'onProvidedDocument']
         );
 
         $dispatcher->addListener(
-            'elasticsearch.has_indexed_document',
-            [$this, 'onIndexedDocument']
+            'elasticsearch.has_finished_providing',
+            [$this, 'onFinishedProviding']
         );
     }
 
@@ -88,7 +88,7 @@ class ProvidingProgressBar
         }
     }
 
-    public function onIndexedDocument(HasIndexedDocument $event)
+    public function onProvidedDocument(HasProvidedDocument $event)
     {
         if ($this->progressBar) {
             $this->progressBar->advance();

@@ -3,7 +3,7 @@
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use Elasticsearch\Client;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Handler;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\Registry;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
@@ -57,11 +57,11 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return DataProviderInterface
+     * @return DataProvider
      */
     private function createProviderExpectingRun($index, $type)
     {
-        $provider = $this->getMock(DataProviderInterface::class);
+        $provider = $this->getMock(DataProvider::class);
 
         $provider
             ->expects($this->once())

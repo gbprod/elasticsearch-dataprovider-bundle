@@ -3,7 +3,7 @@
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DataProvider;
 
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 
 /**
  * Tests for DataProvider registry entry
@@ -14,7 +14,7 @@ class RegistryEntryTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetProvidersEmptyIfNoProviders()
     {
-        $provider = $this->getMock(DataProviderInterface::class);
+        $provider = $this->getMock(DataProvider::class);
 
         $testedInstance = new RegistryEntry(
             $provider,
@@ -40,7 +40,7 @@ class RegistryEntryTest extends \PHPUnit_Framework_TestCase
     public function testMatch()
     {
        $testedInstance = new RegistryEntry(
-            $this->getMock(DataProviderInterface::class),
+            $this->getMock(DataProvider::class),
             'my_index',
             'my_type'
         );

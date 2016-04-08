@@ -10,7 +10,7 @@ namespace GBProd\ElasticsearchDataProviderBundle\DataProvider;
 class RegistryEntry
 {
     /**
-     * @var DataProviderInterface
+     * @var DataProvider
      */
     private $provider;
 
@@ -25,11 +25,11 @@ class RegistryEntry
     private $type;
 
     /**
-     * @param DataProviderInterface $provider
-     * @param string                $index
-     * @param string                $type
+     * @param DataProvider $provider
+     * @param string       $index
+     * @param string       $type
      */
-    public function __construct(DataProviderInterface $provider, $index, $type)
+    public function __construct(DataProvider $provider, $index, $type)
     {
         $this->provider = $provider;
         $this->index    = $index;
@@ -39,7 +39,7 @@ class RegistryEntry
     /**
      * Get provider
      *
-     * @return DataProviderInterface
+     * @return DataProvider
      */
     public function getProvider()
     {
@@ -55,6 +55,7 @@ class RegistryEntry
     {
         return $this->index;
     }
+
     /**
      * Get type
      *

@@ -47,9 +47,9 @@ See [M6WebElasticsearchBundle](https://github.com/M6Web/ElasticsearchBundle) for
 
 namespace GBProd\AcmeBundle\DataProvider;
 
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\BulkDataProvider;
 
-class SuperHeroDataProvider extends DataProvider
+class SuperHeroDataProvider extends BulkDataProvider
 {
     protected function populate()
     {
@@ -120,10 +120,10 @@ php app/console elasticsearch:provide app superheros --client=my_client
 
 namespace GBProd\AcmeBundle\DataProvider;
 
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\BulkDataProvider;
 use Doctrine\ORM\EntityManager;
 
-class SuperHeroDataProvider extends DataProvider
+class SuperHeroDataProvider extends BulkDataProvider
 {
     private $em;
 
@@ -152,7 +152,7 @@ class SuperHeroDataProvider extends DataProvider
 
     public function count()
     {
-            $query = $this->em
+        $query = $this->em
             ->createQuery('SELECT COUNT(s.id) FROM AcmeBundle\Model\SuperHero s')
         ;
 
@@ -173,6 +173,44 @@ services:
             - { name: elasticsearch.dataprovider, index: app, type: superheros }
 ```
 
+### Changing bulk size
+
+Bulk size is important when providing data to elasticsearch. Take care of your nodes setting a good bulk size.
+Default bulk size is 1000, you can change setting the bulk entry of the tag.  
+
+```yml
+# AcmeBundle/Resources/config/services.yml
+
+services:
+    acme_bundle.superhero_dataprovider:
+        class: GBProd\AcmeBundle\DataProvider\SuperHeroDataProvider
+        calls:
+            - ['changeBulkSize', 42]
+        tags:
+            - { name: elasticsearch.dataprovider, index: app, type: superheros }
+```
+
 ### About count method
 
-This is not mandatory to implements `count` method but it allows you to have a pretty progress bar during providing.
+This is not mandatory to implements `count` method but it allows you to have a pretty progressbar while provider is running.
+
+```php
+<?php
+
+namespace GBProd\AcmeBundle\DataProvider;
+
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\BulkDataProvider;
+
+class SuperHeroDataProvider extends BulkDataProvider
+{
+    protected function populate()
+    {
+        // ...
+    }
+
+    public function count()
+    {
+        return 2;
+    }
+}
+```

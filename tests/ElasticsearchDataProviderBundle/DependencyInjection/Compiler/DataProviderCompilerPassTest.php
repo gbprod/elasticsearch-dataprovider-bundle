@@ -2,10 +2,11 @@
 
 namespace Tests\GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler;
 
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 use GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler\DataProviderCompilerPass;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Compiler path to register DataProviders
@@ -50,18 +51,24 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('add', $calls[0][0]);
         $this->assertInstanceOf(Definition::class, $calls[0][1][0]);
+        $this->assertInstanceOf(Reference::class, $calls[0][1][0]->getArgument(0));
+        $this->assertEquals('data_provider.foo.bar', $calls[0][1][0]->getArgument(0)->__toString());
+        $this->assertEquals('foo', $calls[0][1][0]->getArgument(1));
+        $this->assertEquals('bar', $calls[0][1][0]->getArgument(2));
 
         $this->assertEquals('add', $calls[1][0]);
         $this->assertInstanceOf(Definition::class, $calls[1][1][0]);
+        $this->assertEquals('data_provider.bar.foo', $calls[1][1][0]->getArgument(0)->__toString());
+        $this->assertEquals('fizz', $calls[1][1][0]->getArgument(1));
+        $this->assertEquals('buzz', $calls[1][1][0]->getArgument(2));
     }
 
     private function newDataProviderDefinition($index, $type)
     {
-        $definition = new Definition(DataProviderInterface::class);
-        $definition->addTag(
-            'elasticsearch.dataprovider',
-            ['index' => $index, 'type' => $type]
-        );
+        $tag = ['index' => $index, 'type' => $type];
+
+        $definition = new Definition(DataProvider::class);
+        $definition->addTag('elasticsearch.dataprovider', $tag);
 
         return $definition;
     }
@@ -96,7 +103,7 @@ class DataProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
             $this->registryDefinition
         );
 
-        $definition = new Definition(DataProviderInterface::class);
+        $definition = new Definition(DataProvider::class);
         $definition->addTag(
             'elasticsearch.dataprovider',
             ['type' => 'my-type']

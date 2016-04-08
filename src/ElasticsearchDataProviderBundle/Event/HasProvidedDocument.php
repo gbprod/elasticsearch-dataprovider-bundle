@@ -5,11 +5,11 @@ namespace GBProd\ElasticsearchDataProviderBundle\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Event triggered when a document has been indexed
+ * Event triggered when a document has been provided
  *
  * @author gbprod <contact@gb-prod.fr>
  */
-class HasIndexedDocument extends Event
+class HasProvidedDocument extends Event
 {
     /**
      * @var string

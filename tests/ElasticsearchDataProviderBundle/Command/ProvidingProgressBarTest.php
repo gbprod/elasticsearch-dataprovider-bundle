@@ -3,10 +3,10 @@
 namespace ElasticsearchDataProviderBundle\Command;
 
 use GBProd\ElasticsearchDataProviderBundle\Command\ProvidingProgressBar;
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasFinishedProviding;
-use GBProd\ElasticsearchDataProviderBundle\Event\HasIndexedDocument;
+use GBProd\ElasticsearchDataProviderBundle\Event\HasProvidedDocument;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedHandling;
 use GBProd\ElasticsearchDataProviderBundle\Event\HasStartedProviding;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -53,7 +53,7 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
 
     public function testOnStartedProvidingDisplayProviderName()
     {
-        $provider = $this->getMock(DataProviderInterface::class);
+        $provider = $this->getMock(DataProvider::class);
         $entry = new RegistryEntry($provider, 'my_index', 'my_type');
 
         $event = new HasStartedProviding($entry);
@@ -72,7 +72,7 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
 
     public function testOnStartedProvidingCreateProgressBar()
     {
-        $provider = $this->getMock(DataProviderInterface::class);
+        $provider = $this->getMock(DataProvider::class);
         $provider
             ->expects($this->any())
             ->method('count')
@@ -92,11 +92,11 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $this->testedInstance->progressBar->getMaxSteps());
     }
 
-    public function testOnIndexedDocumentAdvanceProgress()
+    public function testOnProvidedDocumentAdvanceProgress()
     {
-        $provider = $this->getMock(DataProviderInterface::class);
+        $provider = $this->getMock(DataProvider::class);
         $entry = new RegistryEntry($provider, 'my_index', 'my_type');
-        $event = new HasIndexedDocument($entry);
+        $event = new HasProvidedDocument($entry);
 
         $this->testedInstance->progressBar = $this
             ->getMock(ProgressBar::class, [], [$this->output])
@@ -108,12 +108,12 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
             ->method('advance')
         ;
 
-        $this->testedInstance->onIndexedDocument($event);
+        $this->testedInstance->onProvidedDocument($event);
     }
 
     public function testOnFinishedProvidingFinishProgress()
     {
-        $provider = $this->getMock(DataProviderInterface::class);
+        $provider = $this->getMock(DataProvider::class);
         $entry = new RegistryEntry($provider, 'my_index', 'my_type');
         $event = new HasFinishedProviding($entry);
 

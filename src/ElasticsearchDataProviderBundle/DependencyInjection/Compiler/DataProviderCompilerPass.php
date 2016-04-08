@@ -2,7 +2,7 @@
 
 namespace GBProd\ElasticsearchDataProviderBundle\DependencyInjection\Compiler;
 
-use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProviderInterface;
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\DataProvider;
 use GBProd\ElasticsearchDataProviderBundle\DataProvider\RegistryEntry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,13 +25,8 @@ class DataProviderCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $registry = $container->getDefinition(
-            'gbprod.elasticsearch_dataprovider.registry'
-        );
-
-        $providers = $container->findTaggedServiceIds(
-            'elasticsearch.dataprovider'
-        );
+        $registry = $container->getDefinition('gbprod.elasticsearch_dataprovider.registry');
+        $providers = $container->findTaggedServiceIds('elasticsearch.dataprovider');
 
         foreach ($providers as $providerId => $tags) {
             $this->processProvider($container, $registry, $providerId, $tags);
@@ -53,7 +48,7 @@ class DataProviderCompilerPass implements CompilerPassInterface
         if ($this->isNotAProvider($container->getDefinition($providerId))) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'DataProvider "%s" must implements DataProviderInterface.',
+                    'DataProvider "%s" must implements DataProvider interface.',
                     $providerId
                 )
             );
@@ -64,7 +59,7 @@ class DataProviderCompilerPass implements CompilerPassInterface
     {
         $reflection = new \ReflectionClass($definition->getClass());
 
-        return !$reflection->implementsInterface(DataProviderInterface::class);
+        return !$reflection->implementsInterface(DataProvider::class);
     }
 
     private function validateTag($tag, $providerId)
@@ -95,9 +90,10 @@ class DataProviderCompilerPass implements CompilerPassInterface
             [
                 new Reference($providerId),
                 $tag['index'],
-                $tag['type']
+                $tag['type'],
             ]
         );
+
         $registry->addMethodCall('add', [$entryDefinition]);
     }
 }

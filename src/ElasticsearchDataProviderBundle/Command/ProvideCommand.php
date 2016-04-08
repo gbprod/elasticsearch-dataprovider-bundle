@@ -25,23 +25,9 @@ class ProvideCommand extends ContainerAwareCommand
         $this
             ->setName('elasticsearch:provide')
             ->setDescription('Provide data to Elasticsearch')
-            ->addArgument(
-                'index',
-                InputArgument::OPTIONAL,
-                'Index to provide'
-            )
-            ->addArgument(
-                'type',
-                InputArgument::OPTIONAL,
-                'Type to provide'
-            )
-            ->addOption(
-                'client',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Client to use (if not default)',
-                'default'
-            )
+            ->addArgument('index', InputArgument::OPTIONAL, 'Index to provide')
+            ->addArgument('type', InputArgument::OPTIONAL, 'Type to provide')
+            ->addOption('client', null, InputOption::VALUE_REQUIRED, 'Client to use (if not default)', 'default')
         ;
     }
 
