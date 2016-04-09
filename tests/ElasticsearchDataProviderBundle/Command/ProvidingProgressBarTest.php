@@ -22,25 +22,34 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
 {
     private $testedInstance;
     private $dispatcher;
-    private $output;
+    private $consoleOutput;
+    private $provider;
+    private $entry;
 
     public function setUp()
     {
         $this->dispatcher = $this->getMock(EventDispatcherInterface::class);
-        $this->output     = $this->getMock(OutputInterface::class);
+        $this->consoleOutput     = $this->getMock(OutputInterface::class);
 
         $this->testedInstance = new ProvidingProgressBar(
             $this->dispatcher,
-            $this->output
+            $this->consoleOutput
         );
+
+        $this->provider = $this->getMock(DataProvider::class);
+        $this->entry = new RegistryEntry($this->provider, 'my_index', 'my_type');
     }
 
     public function testOnStartedHandlingDisplayNumberOfEntries()
     {
-        $event = new HasStartedHandling([1, 2, 3]);
+        $event = new HasStartedHandling([
+            $this->getMock(DataProvider::class),
+            $this->getMock(DataProvider::class),
+            $this->getMock(DataProvider::class),
+        ]);
 
         $this
-            ->output
+            ->consoleOutput
             ->expects($this->once())
             ->method('writeln')
             ->with(
@@ -53,16 +62,13 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
 
     public function testOnStartedProvidingDisplayProviderName()
     {
-        $provider = $this->getMock(DataProvider::class);
-        $entry = new RegistryEntry($provider, 'my_index', 'my_type');
-
-        $event = new HasStartedProviding($entry);
+        $event = new HasStartedProviding($this->entry);
 
         $this
-            ->output
+            ->consoleOutput
             ->expects($this->once())
             ->method('writeln')
-            ->with($this->stringContains(get_class($provider)))
+            ->with($this->stringContains(get_class($this->provider)))
         ;
 
         $this->testedInstance->onStartedProviding($event);
@@ -72,15 +78,13 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
 
     public function testOnStartedProvidingCreateProgressBar()
     {
-        $provider = $this->getMock(DataProvider::class);
-        $provider
+        $event = new HasStartedProviding($this->entry);
+
+        $this->provider
             ->expects($this->any())
             ->method('count')
             ->willReturn(42)
         ;
-
-        $entry = new RegistryEntry($provider, 'my_index', 'my_type');
-        $event = new HasStartedProviding($entry);
 
         $this->testedInstance->onStartedProviding($event);
 
@@ -94,38 +98,31 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
 
     public function testOnProvidedDocumentAdvanceProgress()
     {
-        $provider = $this->getMock(DataProvider::class);
-        $entry = new RegistryEntry($provider, 'my_index', 'my_type');
-        $event = new HasProvidedDocument($entry);
+        $event = new HasProvidedDocument('id');
 
-        $this->testedInstance->progressBar = $this
-            ->getMock(ProgressBar::class, [], [$this->output])
-        ;
-
-        $this->testedInstance
-            ->progressBar
-            ->expects($this->once())
-            ->method('advance')
-        ;
+        $this->setProvressBarExpectsMethod('advance');
 
         $this->testedInstance->onProvidedDocument($event);
     }
 
-    public function testOnFinishedProvidingFinishProgress()
+    private function setProvressBarExpectsMethod($method)
     {
-        $provider = $this->getMock(DataProvider::class);
-        $entry = new RegistryEntry($provider, 'my_index', 'my_type');
-        $event = new HasFinishedProviding($entry);
-
         $this->testedInstance->progressBar = $this
-            ->getMock(ProgressBar::class, [], [$this->output])
+            ->getMock(ProgressBar::class, [], [$this->consoleOutput])
         ;
 
         $this->testedInstance
             ->progressBar
             ->expects($this->once())
-            ->method('finish')
+            ->method($method)
         ;
+    }
+
+    public function testOnFinishedProvidingFinishProgress()
+    {
+        $event = new HasFinishedProviding($this->entry);
+
+        $this->setProvressBarExpectsMethod('finish');
 
         $this->testedInstance->onFinishedProviding($event);
 

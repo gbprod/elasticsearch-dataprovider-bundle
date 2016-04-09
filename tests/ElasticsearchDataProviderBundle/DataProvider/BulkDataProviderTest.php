@@ -53,6 +53,9 @@ class BulkDataProviderTest extends \PHPUnit_Framework_TestCase
       return $client;
    }
 
+   /**
+    * @return IndicesNamespace
+    */
    private function newIndicesExpectingRefresh($index)
    {
       $indices = $this
@@ -174,33 +177,22 @@ class BulkDataProviderTest extends \PHPUnit_Framework_TestCase
 
    public function testDelete()
    {
-      $client = $this->newClientExpectingBulk(
+      $bulk = [
+         'body' =>
          [
-            'body' =>
             [
-               [
-                  'delete' => [
-                      '_index' => 'my_index',
-                      '_type'  => 'my_type',
-                      '_id'    => 'my_id',
-                  ]
+               'delete' => [
+                   '_index' => 'my_index',
+                   '_type'  => 'my_type',
+                   '_id'    => 'my_id',
                ]
             ]
          ]
-      );
+      ];
 
-      $provider = $this->getMockForAbstractClass(BulkDataProvider::class);
-      $provider
-         ->expects($this->once())
-         ->method('populate')
-         ->will(
-            $this->returnCallback(
-               function () use ($provider) {
-                  $provider->delete('my_id');
-               }
-            )
-         )
-      ;
+      $client = $this->newClientExpectingBulk($bulk);
+
+      $provider = $this->newProviderForBulk('delete', 'my_id', null);
 
       $provider->run(
          $client,
@@ -208,6 +200,24 @@ class BulkDataProviderTest extends \PHPUnit_Framework_TestCase
          'my_type',
          $this->getMock(EventDispatcherInterface::class)
       );
+   }
+
+   private function newProviderForBulk($method, $id, $content)
+   {
+      $provider = $this->getMockForAbstractClass(BulkDataProvider::class);
+      $provider
+         ->expects($this->once())
+         ->method('populate')
+         ->will(
+            $this->returnCallback(
+               function () use ($provider, $method, $id, $content) {
+                  $provider->{$method}($id, $content);
+               }
+            )
+         )
+      ;
+
+      return $provider;
    }
 
    public function testCreate()
@@ -230,18 +240,7 @@ class BulkDataProviderTest extends \PHPUnit_Framework_TestCase
          ]
       );
 
-      $provider = $this->getMockForAbstractClass(BulkDataProvider::class);
-      $provider
-         ->expects($this->once())
-         ->method('populate')
-         ->will(
-            $this->returnCallback(
-               function () use ($provider) {
-                  $provider->create('my_id', ['foo' => 'bar']);
-               }
-            )
-         )
-      ;
+      $provider = $this->newProviderForBulk('create', 'my_id', ['foo' => 'bar']);
 
       $provider->run(
          $client,
@@ -271,18 +270,7 @@ class BulkDataProviderTest extends \PHPUnit_Framework_TestCase
          ]
       );
 
-      $provider = $this->getMockForAbstractClass(BulkDataProvider::class);
-      $provider
-         ->expects($this->once())
-         ->method('populate')
-         ->will(
-            $this->returnCallback(
-               function () use ($provider) {
-                  $provider->update('my_id', ['foo' => 'bar']);
-               }
-            )
-         )
-      ;
+      $provider = $this->newProviderForBulk('update', 'my_id', ['foo' => 'bar']);
 
       $provider->run(
          $client,
