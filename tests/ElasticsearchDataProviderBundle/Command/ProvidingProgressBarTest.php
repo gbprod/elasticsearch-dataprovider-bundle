@@ -29,7 +29,7 @@ class ProvidingProgressBarTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->dispatcher = $this->getMock(EventDispatcherInterface::class);
-        $this->consoleOutput     = $this->getMock(OutputInterface::class);
+        $this->consoleOutput = $this->getMock(OutputInterface::class);
 
         $this->testedInstance = new ProvidingProgressBar(
             $this->dispatcher,
