@@ -66,7 +66,7 @@ class DataProviderCompilerPass implements CompilerPassInterface
     {
         if ($this->isTagIncorrect($tag)) {
             throw new \InvalidArgumentException(
-                sprintf('DataProvider "%s" must specify the "index"'.
+                sprintf('DataProvider "%s" must specify the "index"' .
                     ' and "type" attribute.',
                     $providerId
                 )

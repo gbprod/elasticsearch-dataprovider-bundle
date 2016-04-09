@@ -46,7 +46,7 @@ class Handler
 
         $this->dispatchHandlingStartedEvent($entries);
 
-        foreach($entries as $entry) {
+        foreach ($entries as $entry) {
             $this->dispatchProvidingStartedEvent($entry);
 
             $entry->getProvider()->run(

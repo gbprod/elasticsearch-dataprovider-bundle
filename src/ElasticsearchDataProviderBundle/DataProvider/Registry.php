@@ -38,7 +38,7 @@ class Registry
     {
         return array_filter(
             $this->entries,
-            function ($entry) use ($index, $type) {
+            function($entry) use ($index, $type) {
                 return $entry->match($index, $type);
             }
         );
