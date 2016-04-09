@@ -179,7 +179,7 @@ abstract class BulkDataProvider implements DataProvider
      */
     public function update($id, array $body)
     {
-        $this->addBulkAction('update', $id, $body);
+        $this->addBulkAction('update', $id, ['doc' => $body]);
     }
 
     /**

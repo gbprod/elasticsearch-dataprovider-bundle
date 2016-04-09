@@ -253,20 +253,21 @@ class BulkDataProviderTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $client = $this->newClientExpectingBulk(
-            [
-            'body' =>
-            [
-                [
-                    'update' => [
-                        '_index' => 'my_index',
-                        '_type'  => 'my_type',
-                        '_id'    => 'my_id',
-                    ]
-                ],
-                [
-                    'foo' => 'bar',
-                ]
-            ]
+           [
+               'body' =>
+               [
+                  [
+                     'update' =>
+                     [
+                         '_index' => 'my_index',
+                         '_type'  => 'my_type',
+                         '_id'    => 'my_id',
+                     ]
+                  ],
+                  [
+                     'doc' => ['foo' => 'bar'],
+                  ]
+               ]
             ]
         );
 
