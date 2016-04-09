@@ -61,18 +61,28 @@ class SuperHeroDataProvider extends BulkDataProvider
             ]
         );
 
-        $this->index(
-            'Hulk', // id of the document
+        $this->update(
+            'Hulk',
             [
                 "name" => "Hulk",
                 "description" => "Caught in a gamma bomb explosion while trying to save the life of a teenager, Dr. Bruce Banner was transformed into the incredibly powerful creature called the Hulk. An all too often misunderstood hero, the angrier the Hulk gets, the stronger the Hulk gets.",
             ]
         );
+
+        $this->create(
+            'Thor',
+            [
+                "name" => "Thor",
+                "description" => "As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and compassionate.  He's self-assured, and he would never, ever stop fighting for a worthwhile cause.",
+            ]
+        );
+
+        $this->delete('Captain America');
     }
 
     public function count()
     {
-        return 2;
+        return 4;
     }
 }
 ```
@@ -176,7 +186,7 @@ services:
 ### Changing bulk size
 
 Bulk size is important when providing data to elasticsearch. Take care of your nodes setting a good bulk size.
-Default bulk size is 1000, you can change setting the bulk entry of the tag.  
+Default bulk size is 1000, you can change setting the bulk entry of the tag.
 
 ```yml
 # AcmeBundle/Resources/config/services.yml
@@ -190,6 +200,27 @@ services:
             - { name: elasticsearch.dataprovider, index: app, type: superheros }
 ```
 
+Or directly inside a provider.
+```php
+<?php
+
+namespace GBProd\AcmeBundle\DataProvider;
+
+use GBProd\ElasticsearchDataProviderBundle\DataProvider\BulkDataProvider;
+
+class SuperHeroDataProvider extends BulkDataProvider
+{
+    public function __construct()
+    {
+        $this->changeBulkSize(42);
+    }
+
+    protected function populate()
+    {
+        // ...
+    }
+}
+```
 ### About count method
 
 This is not mandatory to implements `count` method but it allows you to have a pretty progressbar while provider is running.
