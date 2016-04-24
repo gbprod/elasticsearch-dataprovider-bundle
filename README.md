@@ -1,5 +1,7 @@
 # Elasticsearch dataprovider bundle
 
+I will not maintain this bundle anymore, prefer [elastica-provider-bundle](https://github.com/gbprod/elastica-provider-bundle).
+
 Bundle that can easily provide data in elasticsearch indices with Symfony using [M6Web elasticsearch bundle](https://github.com/M6Web/ElasticsearchBundle).
 
 [![Build Status](https://travis-ci.org/gbprod/elasticsearch-dataprovider-bundle.svg?branch=master)](https://travis-ci.org/gbprod/elasticsearch-dataprovider-bundle)
