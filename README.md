@@ -1,5 +1,7 @@
 # Elasticsearch dataprovider bundle
 
+![stability-deprecated](https://img.shields.io/badge/stability-deprecated-red.svg)
+
 I will not maintain this bundle anymore, prefer [elastica-provider-bundle](https://github.com/gbprod/elastica-provider-bundle).
 
 Bundle that can easily provide data in elasticsearch indices with Symfony using [M6Web elasticsearch bundle](https://github.com/M6Web/ElasticsearchBundle).
